@@ -1,2 +1,2 @@
 # Battery_indicator
-Battery
+This program Will indicate your task tray.
