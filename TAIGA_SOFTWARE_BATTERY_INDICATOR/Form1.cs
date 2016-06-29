@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Timers;
+using System.Runtime.InteropServices;
 
 namespace BATTERY_INDICATOR
 {
@@ -22,7 +24,6 @@ namespace BATTERY_INDICATOR
             this.Visible = false;
             this.WindowState = FormWindowState.Minimized;
             this.ShowInTaskbar = false;
-
 
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Interval = 30000;
@@ -39,22 +40,24 @@ namespace BATTERY_INDICATOR
                 ddToolStripMenuItem.CheckState = CheckState.Checked;
             }
         }
-        int Textsize_modi = 10;
+
         void timer_tick(object sender, System.EventArgs e)
         {
             string ddd = NextValue().ToString("R");
             CreateTextIcon(ddd);
+            GC.Collect();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            // MessageBox.Show(ddd);
-        }
+        int Textsize_modi = 10;
         float NextValue()
         {
             System.Windows.Forms.PowerStatus ps = System.Windows.Forms.SystemInformation.PowerStatus;
             return ps.BatteryLifePercent * 100;
         }
+
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = CharSet.Auto)]
+        extern static bool DestroyIcon(IntPtr handle);
+
         public void CreateTextIcon(string str)
         {
             //105
@@ -80,10 +83,45 @@ namespace BATTERY_INDICATOR
             Graphics g = System.Drawing.Graphics.FromImage(bitmapText);
 
             IntPtr hIcon;
+
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
-            g.DrawString(str, fontToUse, brushToUse, -10, 15);
+            g.DrawString(str, fontToUse, brushToUse, -10, 18);
             hIcon = (bitmapText.GetHicon());
-            notifyIcon1.Icon = System.Drawing.Icon.FromHandle(hIcon);
+            Icon thisisicon = notifyIcon1.Icon = System.Drawing.Icon.FromHandle(hIcon);
+           // DestroyIcon(createdIcon.Handle);
+            DestroyIcon(thisisicon.Handle);
+
+            try
+            {
+                //
+            }
+            catch (System.Runtime.InteropServices.ExternalException e)
+            {
+                System.Console.WriteLine(e.Message);
+            }
+        }
+
+        public static Icon GetIcon(string text)
+        {
+            Bitmap bitmap = new Bitmap(32, 32);
+
+            System.Drawing.Font drawFont = new System.Drawing.Font("Calibri", 16, FontStyle.Bold);
+            System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
+
+            System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bitmap);
+
+            graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
+            graphics.DrawString(text, drawFont, drawBrush, 1, 2);
+            Icon createdIcon = Icon.FromHandle(bitmap.GetHicon());
+            DestroyIcon(createdIcon.Handle);
+
+
+            drawFont.Dispose();
+            drawBrush.Dispose();
+            graphics.Dispose();
+            bitmap.Dispose();
+
+            return createdIcon;
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)

@@ -29,22 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.button1 = new System.Windows.Forms.Button();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ddToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(232, 157);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(279, 125);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // notifyIcon1
             // 
@@ -61,7 +50,7 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.ShowCheckMargin = true;
             this.contextMenuStrip1.ShowImageMargin = false;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(285, 86);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(316, 46);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // ddToolStripMenuItem
@@ -73,16 +62,16 @@
             this.ddToolStripMenuItem.Overflow = System.Windows.Forms.ToolStripItemOverflow.Always;
             this.ddToolStripMenuItem.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.ddToolStripMenuItem.ShowShortcutKeys = false;
-            this.ddToolStripMenuItem.Size = new System.Drawing.Size(284, 38);
+            this.ddToolStripMenuItem.Size = new System.Drawing.Size(315, 42);
             this.ddToolStripMenuItem.Text = "부팅 시 자동실행";
             this.ddToolStripMenuItem.Click += new System.EventHandler(this.ddToolStripMenuItem_Click);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 27F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(876, 584);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(591, 398);
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "Form1";
             this.Text = "Form1";
             this.contextMenuStrip1.ResumeLayout(false);
@@ -91,8 +80,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem ddToolStripMenuItem;
