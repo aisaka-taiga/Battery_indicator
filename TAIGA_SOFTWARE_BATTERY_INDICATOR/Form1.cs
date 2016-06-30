@@ -88,8 +88,12 @@ namespace BATTERY_INDICATOR
             g.DrawString(str, fontToUse, brushToUse, -10, 18);
             hIcon = (bitmapText.GetHicon());
             Icon thisisicon = notifyIcon1.Icon = System.Drawing.Icon.FromHandle(hIcon);
-           // DestroyIcon(createdIcon.Handle);
             DestroyIcon(thisisicon.Handle);
+
+            fontToUse.Dispose();
+            brushToUse.Dispose();
+            g.Dispose();
+            bitmapText.Dispose();
 
             try
             {
@@ -99,29 +103,6 @@ namespace BATTERY_INDICATOR
             {
                 System.Console.WriteLine(e.Message);
             }
-        }
-
-        public static Icon GetIcon(string text)
-        {
-            Bitmap bitmap = new Bitmap(32, 32);
-
-            System.Drawing.Font drawFont = new System.Drawing.Font("Calibri", 16, FontStyle.Bold);
-            System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
-
-            System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bitmap);
-
-            graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
-            graphics.DrawString(text, drawFont, drawBrush, 1, 2);
-            Icon createdIcon = Icon.FromHandle(bitmap.GetHicon());
-            DestroyIcon(createdIcon.Handle);
-
-
-            drawFont.Dispose();
-            drawBrush.Dispose();
-            graphics.Dispose();
-            bitmap.Dispose();
-
-            return createdIcon;
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
