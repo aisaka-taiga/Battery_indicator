@@ -32,6 +32,7 @@
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ddToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dd2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -40,18 +41,17 @@
             this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
             this.notifyIcon1.Text = "배터리 상태";
             this.notifyIcon1.Visible = true;
-            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ddToolStripMenuItem});
+            this.ddToolStripMenuItem,
+            this.dd2ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.ShowCheckMargin = true;
             this.contextMenuStrip1.ShowImageMargin = false;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(316, 46);
-            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(316, 88);
             // 
             // ddToolStripMenuItem
             // 
@@ -66,14 +66,24 @@
             this.ddToolStripMenuItem.Text = "부팅 시 자동실행";
             this.ddToolStripMenuItem.Click += new System.EventHandler(this.ddToolStripMenuItem_Click);
             // 
+            // dd2ToolStripMenuItem
+            // 
+            this.dd2ToolStripMenuItem.Name = "dd2ToolStripMenuItem";
+            this.dd2ToolStripMenuItem.ShowShortcutKeys = false;
+            this.dd2ToolStripMenuItem.Size = new System.Drawing.Size(315, 42);
+            this.dd2ToolStripMenuItem.Text = "종료";
+            this.dd2ToolStripMenuItem.Click += new System.EventHandler(this.dd2ToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 27F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(591, 398);
+            this.ClientSize = new System.Drawing.Size(264, 51);
+            this.ControlBox = false;
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -83,6 +93,7 @@
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem ddToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dd2ToolStripMenuItem;
     }
 }
 

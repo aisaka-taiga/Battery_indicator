@@ -24,9 +24,10 @@ namespace BATTERY_INDICATOR
             this.Visible = false;
             this.WindowState = FormWindowState.Minimized;
             this.ShowInTaskbar = false;
+            this.FormBorderStyle = FormBorderStyle.Sizable;
 
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-            timer.Interval = 30000;
+            timer.Interval = 25000;
             timer.Tick += new EventHandler(timer_tick);
             timer.Start();
 
@@ -85,7 +86,7 @@ namespace BATTERY_INDICATOR
             IntPtr hIcon;
 
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
-            g.DrawString(str, fontToUse, brushToUse, -10, 18);
+            g.DrawString(str, fontToUse, brushToUse, -10, 0);
             hIcon = (bitmapText.GetHicon());
             Icon thisisicon = notifyIcon1.Icon = System.Drawing.Icon.FromHandle(hIcon);
             DestroyIcon(thisisicon.Handle);
@@ -105,16 +106,6 @@ namespace BATTERY_INDICATOR
             }
         }
 
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
-        {
-
-        }
-
-        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-
-        }
-
         private void ddToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (registryKey.GetValue("TAIGASOFTWARE_BATTERYSTATUS") == null)
@@ -126,6 +117,11 @@ namespace BATTERY_INDICATOR
             {
                 registryKey.DeleteValue("TAIGASOFTWARE_BATTERYSTATUS", false);
             }
+        }
+
+        private void dd2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
