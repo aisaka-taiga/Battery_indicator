@@ -23,3 +23,4 @@ I tested in my desktop, so small fonts.
 ----------
 Copyright &copy; 2016 AISAKA-TAIGA  
 Distributed under the [MIT License][mit].  
+[MIT]: http://www.opensource.org/licenses/mit-license.php
