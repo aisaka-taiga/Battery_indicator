@@ -12,7 +12,6 @@ This program Will indicate your task tray with C#
 ### Testing Device ###
 - Razer Blade 14inch 2014 (3200X1800)
 - MacBook Air 13inch (1440X900)
-- Desktop 24inch (1920X1080)
 
  I think you should change settings. If you have FHD Device.<br>
  I tested in my desktop, so small fonts.
