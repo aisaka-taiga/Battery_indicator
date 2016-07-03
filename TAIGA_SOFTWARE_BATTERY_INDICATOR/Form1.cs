@@ -113,9 +113,10 @@ namespace BATTERY_INDICATOR
                 ddToolStripMenuItem.Checked = true;
                 registryKey.SetValue("TAIGASOFTWARE_BATTERYSTATUS", Application.ExecutablePath.ToString());
             }
-            if (registryKey.GetValue("TAIGASOFTWARE_BATTERYSTATUS") == null)
+            else if (ddToolStripMenuItem.Checked == true)
             {
                 registryKey.DeleteValue("TAIGASOFTWARE_BATTERYSTATUS", false);
+                ddToolStripMenuItem.Checked = false;
             }
         }
 
