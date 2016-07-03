@@ -23,6 +23,8 @@ namespace BATTERY_INDICATOR
             currentFontSizeTB.Text = Setting.IconFont?.Size.ToString() ?? "";
             xOffset.Value = (decimal)Setting.X;
             yOffset.Value = (decimal)Setting.Y;
+            widthNum.Value = Setting.Width;
+            heightNum.Value = Setting.Height;
             showIfFullCB.Checked = Setting.ShowIfFull;
         }
 
