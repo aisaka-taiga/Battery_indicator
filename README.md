@@ -1,5 +1,5 @@
 #Battery_indicator
-This program Will indicate your task tray with C#
+This program will indicate your task tray with C#
 ![SCT](http://i.imgur.com/WVB3hZT.png)
 
 
