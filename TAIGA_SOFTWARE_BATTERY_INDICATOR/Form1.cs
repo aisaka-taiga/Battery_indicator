@@ -87,8 +87,7 @@ namespace BATTERY_INDICATOR
 
             g.Dispose();
             bitmapText.Dispose();
-#endif
-#if !TEST
+#else
             var brushToUse = brushs[Color.White];
             if (BatteryState <= 9)
             {
