@@ -8,25 +8,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Timers;
 using System.Runtime.InteropServices;
 
 namespace BATTERY_INDICATOR
 {
     public partial class Form1 : Form
     {
+        Timer timer = new Timer();
         RegistryKey registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
         public Form1()
         {
+            Setting.Load();
             InitializeComponent();
-            string ddd = NextValue().ToString("R");
+            string ddd = BatteryState.ToString("R");
             CreateTextIcon(ddd);
             this.Visible = false;
             this.WindowState = FormWindowState.Minimized;
             this.ShowInTaskbar = false;
             this.FormBorderStyle = FormBorderStyle.Sizable;
-
-            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Interval = 25000;
             timer.Tick += new EventHandler(timer_tick);
             timer.Start();
@@ -44,58 +43,64 @@ namespace BATTERY_INDICATOR
 
         void timer_tick(object sender, System.EventArgs e)
         {
-            string ddd = NextValue().ToString("R");
+            string ddd = BatteryState.ToString("R");
             CreateTextIcon(ddd);
             GC.Collect();
         }
 
-        int Textsize_modi = 10;
-        float NextValue()
-        {
-            System.Windows.Forms.PowerStatus ps = System.Windows.Forms.SystemInformation.PowerStatus;
-            return ps.BatteryLifePercent * 100;
-        }
+        float BatteryState => SystemInformation.PowerStatus.BatteryLifePercent * 100;
 
         [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = CharSet.Auto)]
         extern static bool DestroyIcon(IntPtr handle);
 
+        private Dictionary<Color, SolidBrush> brushs = new Dictionary<Color, SolidBrush>()
+        {
+            {Color.White,new SolidBrush(Color.White) },
+            {Color.Red,new SolidBrush(Color.Red) },
+            {Color.Green,new SolidBrush(Color.Green) },
+        };
+
         public void CreateTextIcon(string str)
         {
-            //105
-            Font fontToUse = new Font("Microsoft Sans Serif", Textsize_modi, FontStyle.Regular, GraphicsUnit.Pixel);
-            Brush brushToUse = new SolidBrush(Color.White);
-            if (NextValue() <= 9)
+            var brushToUse = brushs[Color.White];
+            if (BatteryState <= 9)
             {
-                fontToUse = new Font("Microsoft Sans Serif", 88);
-                brushToUse = new SolidBrush(Color.Red);
+                brushToUse = brushs[Color.Red];
             }
-            if (NextValue() >= 10)
+            if (BatteryState >= 10)
             {//85
-                fontToUse = new Font("Microsoft Sans Serif", 85);
-                brushToUse = new SolidBrush(Color.White);
+                brushToUse = brushs[Color.White];
             }
-            if (NextValue() == 100)
+            if (BatteryState == 100)
             {
-                fontToUse = new Font("Microsoft Sans Serif", 57);
-                brushToUse = new SolidBrush(Color.Green);
-                // MessageBox.Show("배터리가 완전히 충전되었습니다.");
+                brushToUse = brushs[Color.Green];
+                if (Setting.ShowIfFull)
+                {
+                    if (!Setting.AlreadyCall)
+                    {
+                        MessageBox.Show("배터리가 완전히 충전되었습니다.");
+                        Setting.AlreadyCall = true;
+                    }
+                }
             }
-            Bitmap bitmapText = new Bitmap(128, 128);
+            else
+            {
+                Setting.AlreadyCall = false;
+            }
+            Bitmap bitmapText = new Bitmap(Setting.Width, Setting.Height);
             Graphics g = System.Drawing.Graphics.FromImage(bitmapText);
 
             IntPtr hIcon;
 
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
-            g.DrawString(str, fontToUse, brushToUse, -10, 0);
+            g.DrawString(str, Setting.IconFont, brushToUse, Setting.X,Setting.Y);
             hIcon = (bitmapText.GetHicon());
             Icon thisisicon = notifyIcon1.Icon = System.Drawing.Icon.FromHandle(hIcon);
             DestroyIcon(thisisicon.Handle);
-
-            fontToUse.Dispose();
-            brushToUse.Dispose();
+            
             g.Dispose();
             bitmapText.Dispose();
-
+#if DEBUG
             try
             {
                 //
@@ -104,6 +109,7 @@ namespace BATTERY_INDICATOR
             {
                 System.Console.WriteLine(e.Message);
             }
+#endif
         }
 
         private void ddToolStripMenuItem_Click(object sender, EventArgs e)
@@ -111,7 +117,7 @@ namespace BATTERY_INDICATOR
             if (registryKey.GetValue("TAIGASOFTWARE_BATTERYSTATUS") == null)
             {
                 ddToolStripMenuItem.Checked = true;
-                registryKey.SetValue("TAIGASOFTWARE_BATTERYSTATUS", Application.ExecutablePath.ToString());
+                registryKey.SetValue("TAIGASOFTWARE_BATTERYSTATUS", Application.ExecutablePath);
             }
             else if (ddToolStripMenuItem.Checked == true)
             {
@@ -122,7 +128,20 @@ namespace BATTERY_INDICATOR
 
         private void dd2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            timer.Stop();
+            Setting.Save();
+            Setting.IconFont.Dispose();
+            foreach(var brush in brushs)
+                brush.Value.Dispose();
+            timer.Dispose();
             Application.Exit();
+        }
+
+        private void 설정ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SettingForm form = new SettingForm();
+            form.ShowDialog();
+            CreateTextIcon(BatteryState.ToString("R"));
         }
     }
 }
