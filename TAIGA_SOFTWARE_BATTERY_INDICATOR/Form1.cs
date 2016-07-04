@@ -1,27 +1,26 @@
-﻿using Microsoft.Win32;
+﻿//#define TEST
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+
 
 namespace BATTERY_INDICATOR
 {
     public partial class Form1 : Form
     {
+#if TEST
+        string TestStr = "  6  ";
+#endif
         Timer timer = new Timer();
         RegistryKey registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
         public Form1()
         {
             Setting.Load();
             InitializeComponent();
-            string ddd = BatteryState.ToString("R");
-            CreateTextIcon(ddd);
+            CreateTextIcon();
             this.Visible = false;
             this.WindowState = FormWindowState.Minimized;
             this.ShowInTaskbar = false;
@@ -43,14 +42,26 @@ namespace BATTERY_INDICATOR
 
         void timer_tick(object sender, System.EventArgs e)
         {
-            string ddd = BatteryState.ToString("R");
-            CreateTextIcon(ddd);
+            CreateTextIcon();
             GC.Collect();
         }
 
         float BatteryState => SystemInformation.PowerStatus.BatteryLifePercent * 100;
+        string BatteryString
+        {
+            get
+            {
+                var str = BatteryState.ToString();
+                if (str.Length == 3)//100%
+                    return str;
+                else if (str.Length == 2)//10%~99%
+                    return " " + str + " ";
+                else//1%~9%
+                    return "  " + str + "  ";
+            }
+        }
 
-        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = CharSet.Auto)]
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
         extern static bool DestroyIcon(IntPtr handle);
 
         private Dictionary<Color, SolidBrush> brushs = new Dictionary<Color, SolidBrush>()
@@ -60,8 +71,24 @@ namespace BATTERY_INDICATOR
             {Color.Green,new SolidBrush(Color.Green) },
         };
 
-        public void CreateTextIcon(string str)
+        public void CreateTextIcon()
         {
+#if TEST
+            Bitmap bitmapText = new Bitmap(Setting.Width, Setting.Height);
+            Graphics g = Graphics.FromImage(bitmapText);
+
+            IntPtr hIcon;
+
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
+            g.DrawString(TestStr, Setting.IconFont, brushs[Color.White], Setting.X, Setting.Y);
+            hIcon = (bitmapText.GetHicon());
+            Icon thisisicon = notifyIcon1.Icon = Icon.FromHandle(hIcon);
+            DestroyIcon(thisisicon.Handle);
+
+            g.Dispose();
+            bitmapText.Dispose();
+#endif
+#if !TEST
             var brushToUse = brushs[Color.White];
             if (BatteryState <= 9)
             {
@@ -93,13 +120,14 @@ namespace BATTERY_INDICATOR
             IntPtr hIcon;
 
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
-            g.DrawString(str, Setting.IconFont, brushToUse, Setting.X,Setting.Y);
+            g.DrawString(BatteryString, Setting.IconFont, brushToUse, Setting.X,Setting.Y);
             hIcon = (bitmapText.GetHicon());
             Icon thisisicon = notifyIcon1.Icon = System.Drawing.Icon.FromHandle(hIcon);
             DestroyIcon(thisisicon.Handle);
             
             g.Dispose();
             bitmapText.Dispose();
+#endif
 #if DEBUG
             try
             {
@@ -139,9 +167,11 @@ namespace BATTERY_INDICATOR
 
         private void 설정ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            timer.Stop();
             SettingForm form = new SettingForm();
             form.ShowDialog();
-            CreateTextIcon(BatteryState.ToString("R"));
+            CreateTextIcon();
+            timer.Start();
         }
     }
 }
