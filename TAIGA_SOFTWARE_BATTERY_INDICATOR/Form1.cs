@@ -51,7 +51,7 @@ namespace BATTERY_INDICATOR
         {
             get
             {
-                var str = BatteryState.ToString();
+                var str = BatteryState.ToString("R");
                 if (str.Length == 3)//100%
                     return str;
                 else if (str.Length == 2)//10%~99%
