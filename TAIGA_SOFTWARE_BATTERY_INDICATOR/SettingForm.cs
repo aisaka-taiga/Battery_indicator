@@ -60,6 +60,5 @@ namespace BATTERY_INDICATOR
         {
             Setting.ShowIfFull = showIfFullCB.Checked;
         }
-
     }
 }
