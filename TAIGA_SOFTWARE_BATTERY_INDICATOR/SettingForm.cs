@@ -12,6 +12,7 @@ namespace BATTERY_INDICATOR
 {
     public partial class SettingForm : Form
     {
+        private bool Initializing = true;
         public SettingForm()
         {
             InitializeComponent();
@@ -26,6 +27,7 @@ namespace BATTERY_INDICATOR
             widthNum.Value = Setting.Width;
             heightNum.Value = Setting.Height;
             showIfFullCB.Checked = Setting.ShowIfFull;
+            Initializing = false;
         }
 
         private void changeFontBtn_Click(object sender, EventArgs e)
@@ -41,12 +43,16 @@ namespace BATTERY_INDICATOR
 
         private void ValueChanged(object sender, EventArgs e)
         {
+            if (Initializing)
+                return;
             Setting.X = (float)xOffset.Value;
             Setting.Y = (float)yOffset.Value;
         }
 
         private void ResolutionValueChanged(object sender,EventArgs e)
         {
+            if (Initializing)
+                return;
             Setting.Width = (int)widthNum.Value;
             Setting.Height = (int)heightNum.Value;
         }
@@ -58,6 +64,8 @@ namespace BATTERY_INDICATOR
 
         private void showIfFullCB_CheckedChanged(object sender, EventArgs e)
         {
+            if (Initializing)
+                return;
             Setting.ShowIfFull = showIfFullCB.Checked;
         }
     }
