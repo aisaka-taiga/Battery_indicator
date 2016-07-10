@@ -13,9 +13,9 @@ This program will indicate your task tray with C#
 - Razer Blade 14inch 2014 (3200X1800)
 - MacBook Air 13inch (1440X900)
 
- I think you should change settings. If you have FHD Device.<br>
- I tested in my desktop, so small fonts.
-
+ You can change font size with left mosue botton(icon)<br>
+ I tested in my desktop, so small fonts.<br>
+ If you want translte to english, contact me qwerty0204@gmail.com
 ----------
 Copyright &copy; 2016 AISAKA-TAIGA  
 Distributed under the [MIT License][mit].  
