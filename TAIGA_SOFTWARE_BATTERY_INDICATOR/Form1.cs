@@ -25,6 +25,7 @@ namespace BATTERY_INDICATOR
             this.WindowState = FormWindowState.Minimized;
             this.ShowInTaskbar = false;
             this.FormBorderStyle = FormBorderStyle.Sizable;
+            Setting.AlreadyCall = false;
             timer.Interval = 25000;
             timer.Tick += new EventHandler(timer_tick);
             timer.Start();
@@ -92,6 +93,7 @@ namespace BATTERY_INDICATOR
             if (BatteryState <= 9)
             {
                 brushToUse = brushs[Color.Red];
+                Setting.AlreadyCall = false;
             }
             if (BatteryState >= 10)
             {//85
@@ -109,10 +111,6 @@ namespace BATTERY_INDICATOR
                     }
                 }
             }
-            else
-            {
-                Setting.AlreadyCall = false;
-            }
             Bitmap bitmapText = new Bitmap(Setting.Width, Setting.Height);
             Graphics g = System.Drawing.Graphics.FromImage(bitmapText);
 
@@ -121,6 +119,7 @@ namespace BATTERY_INDICATOR
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
             g.DrawString(BatteryString, Setting.IconFont, brushToUse, Setting.X,Setting.Y);
             hIcon = (bitmapText.GetHicon());
+            notifyIcon1.Text = "배터리" + BatteryString;
             Icon thisisicon = notifyIcon1.Icon = System.Drawing.Icon.FromHandle(hIcon);
             DestroyIcon(thisisicon.Handle);
             
